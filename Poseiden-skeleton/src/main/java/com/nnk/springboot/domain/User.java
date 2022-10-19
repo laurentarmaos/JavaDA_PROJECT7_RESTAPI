@@ -2,21 +2,38 @@ package com.nnk.springboot.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import com.nnk.springboot.validation.PasswordValidation;
 
 @Entity
 @Table(name = "users")
 public class User {
+	
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+    
     @NotBlank(message = "Username is mandatory")
+    @Column(name="username")
     private String username;
+    
+    @PasswordValidation
+    @Size(min=8)
     @NotBlank(message = "Password is mandatory")
+    @Column(name="password")
     private String password;
+    
     @NotBlank(message = "FullName is mandatory")
+    @Column(name="fullname")
     private String fullname;
+    
     @NotBlank(message = "Role is mandatory")
+    @Column(name="role")
     private String role;
+    
+    
+    public User() {}
 
     public Integer getId() {
         return id;
