@@ -12,8 +12,13 @@
 	<div class="row">
 		<h2>Update User</h2>
 	</div>
+	
+	<div th:if="${errorId}">
+		<p class="text-danger" th:text="${errorId}"></p>
+		<a class="btn btn-danger btn-sm" href="/curvePoint/list">Back to list</a>
+	</div>
 
-	<div class="row">
+	<div class="row" th:unless="${errorId}">
 		<form action="#" th:action="@{/user/update/{id}(id=${user.id})}" th:object="${user}" method="post" class="form-horizontal" style="width: 100%">
 			<div class="form-group">
 				<label for="fullname" class="col-sm-2 control-label">Full Name</label>

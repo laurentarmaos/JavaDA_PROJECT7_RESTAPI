@@ -3,6 +3,9 @@ package com.nnk.springboot.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.NumberFormat;
+
 import java.sql.Timestamp;
 
 @Entity
@@ -11,7 +14,7 @@ public class Rating {
     // TODO: Map columns in data table RATING with corresponding java fields
 	
 	@Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 	
     @Column(name="moodysRating")

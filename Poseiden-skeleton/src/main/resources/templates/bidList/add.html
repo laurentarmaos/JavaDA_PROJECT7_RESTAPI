@@ -15,12 +15,9 @@
 
 	<div class="row">
 		<form action="#" th:action="@{/bidList/validate}" th:object="${bidList}" method="post" class="form-horizontal" style="width: 100%">
-			<!--
-			TODO: Create a form to input the values of Bid, there are 2 buttons: Save data and Cancel to the list Bid
-			 -->
 			 
 			 <div class="form-group">
-				<label for="fullname" class="col-sm-2 control-label">Acount</label>
+				<label for="account" class="col-sm-2 control-label">Acount<span class="text-danger">*</span></label>
 				<div class="col-sm-10">
 					<input type="text" th:field="*{account}" id="account" placeholder="Account" class="col-4">
 					<p class="text-danger" th:if="${#fields.hasErrors('account')}" th:errors="*{account}"></p>
@@ -28,7 +25,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="fullname" class="col-sm-2 control-label">Type</label>
+				<label for="type" class="col-sm-2 control-label">Type<span class="text-danger">*</span></label>
 				<div class="col-sm-10">
 					<input type="text" th:field="*{type}" id="type" placeholder="Type" class="col-4">
 					<p class="text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
@@ -36,9 +33,9 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="fullname" class="col-sm-2 control-label">Bid Quantity</label>
+				<label for="bidQuantity" class="col-sm-2 control-label">Bid Quantity</label>
 				<div class="col-sm-10">
-					<input type="text" th:field="*{bidQuantity}" id="bidQuantity" placeholder="Full Name" class="col-4">
+					<input type="number" min="0" th:field="*{bidQuantity}" id="bidQuantity" placeholder="Bid Quantity" class="col-4">
 					<p class="text-danger" th:if="${#fields.hasErrors('bidQuantity')}" th:errors="*{bidQuantity}"></p>
 				</div>
 			</div>

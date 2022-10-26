@@ -2,6 +2,8 @@ package com.nnk.springboot.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+
 import java.sql.Timestamp;
 
 
@@ -11,7 +13,7 @@ public class Trade {
     // TODO: Map columns in data table TRADE with corresponding java fields
 	
 	@Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer tradeId;
 	
     @Column(name="account")
@@ -20,6 +22,7 @@ public class Trade {
     @Column(name="type")
 	private String type;
 	
+    @Positive
     @Column(name="buyQuantity")
 	private Double buyQuantity;
 	

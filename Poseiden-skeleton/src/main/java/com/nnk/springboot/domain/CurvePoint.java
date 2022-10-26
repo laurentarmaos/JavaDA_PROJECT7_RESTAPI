@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import java.sql.Timestamp;
 
 
@@ -14,7 +16,7 @@ public class CurvePoint {
     // TODO: Map columns in data table CURVEPOINT with corresponding java fields
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(name="curveId")
@@ -23,9 +25,11 @@ public class CurvePoint {
     @Column(name="asOfDate")
 	private Timestamp asOfDate;
 	
+    @Positive(message = "Term should be a positive number")
     @Column(name="term")
 	private Double term;
 	
+    @Positive(message = "Value should be a positive number")
     @Column(name="value")
 	private Double value;
 	

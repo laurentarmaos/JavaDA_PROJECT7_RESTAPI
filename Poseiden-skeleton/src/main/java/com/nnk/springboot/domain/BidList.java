@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import java.sql.Date;
@@ -15,7 +16,7 @@ import java.sql.Timestamp;
 public class BidList {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer BidListId;
 	
 	@NotBlank(message = "Account is mandatory")
@@ -26,10 +27,11 @@ public class BidList {
 	@Column(name="type")
 	private String type;
 	
-	@Positive
+	@Positive(message = "Quantity must be a positive number")
 	@Column(name="bidQuantity")
 	private Double bidQuantity;
 	
+	@Positive
 	@Column(name="askQuantity")
 	private Double askQuantity;
 	
@@ -97,7 +99,7 @@ public class BidList {
 	}
 
 	public void setBidListId(Integer bidListId) {
-		BidListId = bidListId;
+		this.BidListId = bidListId;
 	}
 
 	public String getAccount() {
