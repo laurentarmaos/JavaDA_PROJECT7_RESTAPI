@@ -21,13 +21,16 @@ public class SecurityConfig {
 		http.csrf().disable()
         	.authorizeRequests()
         	//.anyRequest().permitAll();
-        	.antMatchers("/user/add", "/user/validate", "/webjars/**", "/css/**").permitAll()
+        	.antMatchers("/register", "/webjars/**", "/css/**").permitAll()
+        	.antMatchers("/user/add", "/user/validate", "/user/list", "/user/update").hasRole("ADMIN")
     		.anyRequest().authenticated()
     		.and()
     		.formLogin()
     			.loginPage("/login")
-    				.permitAll();
-		
+    				.permitAll()
+    		.and()
+    		.exceptionHandling()
+    		.accessDeniedPage("/403");
 		return http.build();
 	}
 	

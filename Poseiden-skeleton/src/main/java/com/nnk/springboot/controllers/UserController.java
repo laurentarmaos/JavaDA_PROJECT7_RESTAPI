@@ -56,9 +56,9 @@ public class UserController {
     		return "user/add";
     	}
     	
-    	userService.createUser(user);
+    	userService.addUser(user);
     	model.addAttribute("users", userService.getUserList());
-    	log.info("new bid created : " + user.getUsername() + ", redirect to /user/list");
+    	log.info("new user created : " + user.getUsername() + ", redirect to /user/list");
     	return "redirect:/user/list";
     }
 
@@ -113,5 +113,38 @@ public class UserController {
         }
  
         return "redirect:/";
+    }
+    
+    
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+    	model.addAttribute("user", new User());
+    	
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return "/register";
+        }
+ 
+        return "redirect:/";
+    }
+    
+    
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+
+    	if(result.hasErrors()) {
+    		log.error("error : " + result);
+    		return "/register";
+    	}
+    	
+    	userService.createUser(user);
+    	model.addAttribute("users", userService.getUserList());
+    	log.info("new user created : " + user.getUsername() + ", redirect to home");
+    	return "redirect:/";
+    }
+    
+    @GetMapping("/403")
+    public String accessDenied() {
+    	return "/403";
     }
 }

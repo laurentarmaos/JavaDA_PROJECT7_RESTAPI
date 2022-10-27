@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void createUser(User dto) {
+	public void addUser(User dto) {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -42,11 +42,26 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	@Override
+	public void createUser(User dto) {
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		
+		dto.setPassword(encoder.encode(dto.getPassword()));
+		dto.setRole("USER");
+
+		userRepository.save(dto);
+		
+	}
 	
 	@Override
 	public void updateUser(User dto, Integer id) {
 		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		
 		dto.setId(id);
+		
+		dto.setPassword(encoder.encode(dto.getPassword()));
 		
 		userRepository.save(dto);
 		

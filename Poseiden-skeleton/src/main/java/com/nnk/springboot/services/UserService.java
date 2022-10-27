@@ -11,6 +11,8 @@ public interface UserService extends UserDetailsService{
 	List<User> getUserList();
 	
 	User getById(Integer id);
+	
+	void addUser(User dto);
 
 	void createUser(User dto);
 	
