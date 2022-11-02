@@ -79,6 +79,12 @@ public class Trade {
 	
 	
 	public Trade() {}
+	
+	public Trade(String account, String type) {
+		super();
+		this.account = account;
+		this.type = type;
+	}
 
 
 	public Integer getTradeId() {

@@ -8,7 +8,7 @@ import com.nnk.springboot.validation.PasswordValidation;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User{
 	
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class User {
     private String username;
     
     @PasswordValidation
-    @Size(min=8)
+    @Size(min=8, message="Password should have at least 8 characters")
     @NotBlank(message = "Password is mandatory")
     @Column(name="password")
     private String password;
@@ -34,8 +34,19 @@ public class User {
     
     
     public User() {}
+    
+    
 
-    public Integer getId() {
+    public User(String username, String password, String fullname, String role) {
+		this.username = username;
+		this.password = password;
+		this.fullname = fullname;
+		this.role = role;
+	}
+
+
+
+	public Integer getId() {
         return id;
     }
 
@@ -74,4 +85,5 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
 }
