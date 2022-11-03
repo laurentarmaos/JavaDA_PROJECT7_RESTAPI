@@ -93,6 +93,14 @@ public class BidList {
 		this.type = type;
 		this.bidQuantity = bidQuantity;
 	}
+	
+	public BidList(Integer bidListId, String account, String type, Double bidQuantity) {
+		this.BidListId = bidListId;
+		this.account = account;
+		this.type = type;
+		this.bidQuantity = bidQuantity;
+	}
+
 
 	public Integer getBidListId() {
 		return BidListId;

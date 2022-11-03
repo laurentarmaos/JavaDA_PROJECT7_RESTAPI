@@ -33,17 +33,17 @@ public class BidListServiceImpl implements BidListService {
 	}
 
 	@Override
-	public void createBidList(BidList dto) {
+	public BidList createBidList(BidList dto) {
 
 		dto.setCreationDate(new Timestamp(System.currentTimeMillis()));
 		dto.setCreationName(dto.getAccount());
 		
-		bidListRepository.save(dto);
+		return bidListRepository.save(dto);
 		
 	}
 
 	@Override
-	public void updateBidList(BidList dto, Integer id) {
+	public BidList updateBidList(BidList dto, Integer id) {
 
 		BidList bidList = bidListRepository.findById(id).get();
 		
@@ -53,7 +53,7 @@ public class BidListServiceImpl implements BidListService {
 		bidList.setType(dto.getType());
 		bidList.setRevisionName(dto.getAccount());
 		
-		bidListRepository.save(bidList);
+		return bidListRepository.save(bidList);
 		
 	}
 

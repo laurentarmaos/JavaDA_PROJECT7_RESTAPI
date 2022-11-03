@@ -10,9 +10,9 @@ public interface BidListService {
 	
 	BidList getById(Integer id);
 
-	void createBidList(BidList dto);
+	BidList createBidList(BidList dto);
 	
-	void updateBidList(BidList dto, Integer id);
+	BidList updateBidList(BidList dto, Integer id);
 	
 	void deleteBidList(Integer id) throws Exception;
 }
