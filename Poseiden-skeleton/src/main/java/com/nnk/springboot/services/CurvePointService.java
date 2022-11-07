@@ -10,9 +10,9 @@ public interface CurvePointService {
 	
 	CurvePoint getById(Integer id);
 
-	void createCurvePoint(CurvePoint dto);
+	CurvePoint createCurvePoint(CurvePoint dto);
 	
-	void updateCurvePoint(CurvePoint dto, Integer id);
+	CurvePoint updateCurvePoint(CurvePoint dto, Integer id);
 	
 	void deleteCurvePoint(Integer id) throws Exception;
 }

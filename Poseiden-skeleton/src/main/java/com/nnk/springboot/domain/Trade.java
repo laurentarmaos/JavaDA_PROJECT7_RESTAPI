@@ -85,6 +85,13 @@ public class Trade {
 		this.account = account;
 		this.type = type;
 	}
+	
+	public Trade(Integer tradeId, String account, String type) {
+		super();
+		this.tradeId = tradeId;
+		this.account = account;
+		this.type = type;
+	}
 
 
 	public Integer getTradeId() {

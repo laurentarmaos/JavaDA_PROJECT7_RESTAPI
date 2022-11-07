@@ -2,17 +2,22 @@ package com.nnk.springboot.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nnk.springboot.controllers.BidListController;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
+	Logger log = LoggerFactory.getLogger(BidListController.class);
 	
 	@Autowired
 	UserRepository userRepository;
@@ -26,36 +31,43 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getById(Integer id) {
 
-		User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
+		User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 		
 		return user;
 	}
+	
+	@Override
+	public boolean existsByUserName(String userName) {
+
+		return userRepository.existsByUsername(userName);
+	}
 
 	@Override
-	public void addUser(User dto) {
+	public User addUser(User dto) {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		dto.setPassword(encoder.encode(dto.getPassword()));
-
-		userRepository.save(dto);
+		
+		log.info("Service : user :" + dto.getUsername() + " created by administrator");
+		return userRepository.save(dto);
 		
 	}
 
 	@Override
-	public void createUser(User dto) {
+	public User createUser(User dto) {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		dto.setPassword(encoder.encode(dto.getPassword()));
 		dto.setRole("USER");
-
-		userRepository.save(dto);
+		log.info("Service : user :" + dto.getUsername() + " created by registration");
+		return userRepository.save(dto);
 		
 	}
 	
 	@Override
-	public void updateUser(User dto, Integer id) {
+	public User updateUser(User dto, Integer id) {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -63,7 +75,8 @@ public class UserServiceImpl implements UserService {
 		
 		dto.setPassword(encoder.encode(dto.getPassword()));
 		
-		userRepository.save(dto);
+		log.info("Service : user :" + dto.getUsername() + " updated by administrator");
+		return userRepository.save(dto);
 		
 	}
 
@@ -71,7 +84,7 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(Integer id) throws Exception {
 		
 		userRepository.deleteById(id);
-		
+		log.info("Service : user with id :" + id + " deleted by administrator");
 	}
 
 	
@@ -80,7 +93,8 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByUsername(username);
 
         if (user == null){
-            throw new UsernameNotFoundException("Invalid username or pwd.");
+        	log.error("Service : error : " + username + " not found");
+            throw new UsernameNotFoundException("Invalid username.");
         }
         
         

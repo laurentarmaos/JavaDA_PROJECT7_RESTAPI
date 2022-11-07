@@ -29,6 +29,10 @@ public class SecurityConfig {
     			.loginPage("/login")
     				.permitAll()
     		.and()
+    		.oauth2Login()
+    			.loginPage("/login")
+					.permitAll()
+    		.and()
     		.exceptionHandling()
     		.accessDeniedPage("/403");
 		return http.build();

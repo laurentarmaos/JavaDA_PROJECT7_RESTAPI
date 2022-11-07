@@ -10,9 +10,9 @@ public interface TradeService {
 	
 	Trade getById(Integer id);
 	
-	void createTrade(Trade dto);
+	Trade createTrade(Trade dto);
 	
-	void updateTrade(Trade dto, Integer id);
+	Trade updateTrade(Trade dto, Integer id);
 	
 	void deleteTrade(Integer id) throws Exception;
 

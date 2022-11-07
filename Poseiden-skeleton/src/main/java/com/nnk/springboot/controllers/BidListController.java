@@ -27,11 +27,12 @@ public class BidListController {
 	@Autowired
 	private BidListService bidListService;
 
+	
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
     	model.addAttribute("bids", bidListService.getBidList());
-    	log.info("get list of all bids");
+    	log.info("Controller : get list of all bids");
         return "bidList/list";
     }
 
@@ -41,19 +42,21 @@ public class BidListController {
         return "bidList/add";
     }
 
+    
     @PostMapping("/bidList/validate")
     public String validate(@Valid @ModelAttribute("bidList") BidList bidList, BindingResult result, Model model) {
     	
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "bidList/add";
     	}
     	
     	bidListService.createBidList(bidList);
     	model.addAttribute("bids", bidListService.getBidList());
-    	log.info("new bid created : " + bidList.getAccount() + ", redirect to /bidList/list");
+    	log.info("Controller : new bid created : " + bidList.getAccount() + ", redirect to /bidList/list");
         return "redirect:/bidList/list";
     }
+
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -61,39 +64,41 @@ public class BidListController {
     	try {
     		BidList bidList = bidListService.getById(id);
     		model.addAttribute("bidList", bidList);
-    		log.info("get bid by id : " + id);
+    		log.info("Controller : get bid by id : " + id);
             return "bidList/update";
 		} catch (Exception e) {
 			model.addAttribute("errorId", "Invalid bid Id:" + id);
-			log.error("error, invalid bidList id : " + id);
+			log.error("Controller : error, invalid bidList id : " + id);
             return "bidList/update";
 		}
     	
     }
+
 
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
     	
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "bidList/update";
     	}
     	
     	bidListService.updateBidList(bidList, id);
-    	log.info("updated bid : " + bidList.getCreationName());
+    	log.info("Controller : updated bid : " + bidList.getCreationName());
     	model.addAttribute("bids", bidListService.getBidList());
         return "redirect:/bidList/list";
     }
+
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
  
     	try {
 			bidListService.deleteBidList(id);
-			log.info("deleted bid with id : " + id);
+			log.info("Controller : deleted bid with id : " + id);
 		} catch (Exception e) {
-			log.error("invalid id : " + id);
+			log.error("Controller : invalid id : " + id);
 		}
     	
     	model.addAttribute("bids", bidListService.getBidList());

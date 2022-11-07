@@ -1,6 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.User;
+import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.services.UserService;
 
 import org.slf4j.Logger;
@@ -29,98 +30,112 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    
     @RequestMapping("/user/list")
     public String home(Model model)
     {
         model.addAttribute("users", userService.getUserList());
+        log.info("Controller : get list of all users");
         return "user/list";
     }
 
+    //admin authority
     @GetMapping("/user/add")
     public String addUser(Model model) {
     	model.addAttribute("user", new User());
-    	
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-            return "user/add";
-        }
  
-        return "redirect:/";
+        return "user/add";
  
     }
 
+    //admin authority
     @PostMapping("/user/validate")
     public String validate(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "user/add";
     	}
     	
+    	if(userService.existsByUserName(user.getUsername())) {
+			model.addAttribute("errorUser", "user already exists !");
+			log.error("Controller : error : " + user.getUsername() + " already exists");
+			return "user/add";
+		}
+    	
     	userService.addUser(user);
     	model.addAttribute("users", userService.getUserList());
-    	log.info("new user created : " + user.getUsername() + ", redirect to /user/list");
+    	log.info("Controller : new user created : " + user.getUsername() + ", redirect to /user/list");
     	return "redirect:/user/list";
     }
 
+    //admin authority
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         
     	try {
 			User user = userService.getById(id);
 			model.addAttribute("user", user);
-			log.info("get user by id : " + id);
+			log.info("Controller : get user by id : " + id);
             return "user/update";
 		} catch (Exception e) {
 			model.addAttribute("errorId", "Invalid bid Id:" + id);
-			log.error("error, invalid user id : " + id);
+			log.error("Controller : error, invalid user id : " + id);
             return "user/update";
 		}
 
     }
 
+    //admin authority
     @PostMapping("/user/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
-        	log.error("error : " + result);
+        	log.error("Controller : error : " + result);
             return "user/update";
         }
 
         userService.updateUser(user, id);
-        log.info("updated user : " + user.getUsername());
+        log.info("Controller : updated user : " + user.getUsername());
         model.addAttribute("users", userService.getUserList());
         return "redirect:/user/list";
     }
 
+    //admin authority
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
 
     	try {
 			userService.deleteUser(id);
-			log.info("deleted user with id : " + id);
+			log.info("Controller : deleted user with id : " + id);
 		} catch (Exception e) {
-			log.error("invalid id : " + id);
+			log.error("Controller : invalid id : " + id);
 		}
     	model.addAttribute("users", userService.getUserList());
         return "redirect:/user/list";
     }
     
+    
+    
     @GetMapping("/login")
     public String login(Model model) {
+    	
+    	//redirect user if already authenticated
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {       	
             return "login";
         }
  
         return "redirect:/";
     }
     
-    
+   
+
     @GetMapping("/register")
     public String registerForm(Model model) {
     	model.addAttribute("user", new User());
     	
+    	//redirect user if already authenticated
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "/register";
@@ -129,21 +144,29 @@ public class UserController {
         return "redirect:/";
     }
     
-    
+
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "/register";
     	}
     	
+    	if(userService.existsByUserName(user.getUsername())) {
+			model.addAttribute("errorUser", "user already exists !");
+			log.error("Controller : error : " + user.getUsername() + " already exists");
+			return "register";
+		}
+    	
     	userService.createUser(user);
     	model.addAttribute("users", userService.getUserList());
-    	log.info("new user created : " + user.getUsername() + ", redirect to home");
+    	log.info("Controller : new user created : " + user.getUsername() + ", redirect to home");
     	return "redirect:/";
     }
     
+   
+    //forbidden access page
     @GetMapping("/403")
     public String accessDenied() {
     	return "/403";

@@ -2,14 +2,19 @@ package com.nnk.springboot.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nnk.springboot.controllers.BidListController;
 import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.repositories.RuleNameRepository;
 
 @Service
 public class RuleNameServiceImpl implements RuleNameService{
+	
+	Logger log = LoggerFactory.getLogger(BidListController.class);
 	
 	@Autowired
 	RuleNameRepository ruleNameRepository;
@@ -23,30 +28,33 @@ public class RuleNameServiceImpl implements RuleNameService{
 	@Override
 	public RuleName getById(Integer id) {
 
-		RuleName ruleName = ruleNameRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
+		RuleName ruleName = ruleNameRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ruleName Id:" + id));
 		
 		return ruleName;
 	}
 
 	@Override
-	public void createRuleName(RuleName dto) {
+	public RuleName createRuleName(RuleName dto) {
 
-		ruleNameRepository.save(dto);
+		log.info("Service : ruleName with id " + dto.getName() + " created");
+		return ruleNameRepository.save(dto);
 		
 	}
 
 	@Override
-	public void updateRuleName(RuleName dto, Integer id) {
+	public RuleName updateRuleName(RuleName dto, Integer id) {
 
 		dto.setId(id);
 		
-		ruleNameRepository.save(dto);
+		log.info("Service : ruleName with id " + id + " updated");
+		return ruleNameRepository.save(dto);
 		
 	}
 
 	@Override
 	public void deleteRuleName(Integer id) throws Exception {
 
+		log.info("Service : ruleName with id " + id + " deleted");
 		ruleNameRepository.deleteById(id);
 		
 	}

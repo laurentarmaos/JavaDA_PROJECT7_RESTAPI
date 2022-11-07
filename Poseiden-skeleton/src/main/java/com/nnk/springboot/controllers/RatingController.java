@@ -25,13 +25,15 @@ public class RatingController {
 	@Autowired
 	RatingService ratingService;
 
+
     @RequestMapping("/rating/list")
     public String home(Model model)
     {
         model.addAttribute("ratings", ratingService.getRatingList());
-        log.info("get list of all ratings");
+        log.info("Controller : get list of all ratings");
         return "rating/list";
     }
+
 
     @GetMapping("/rating/add")
     public String addRatingForm(Model model) {
@@ -39,19 +41,21 @@ public class RatingController {
         return "rating/add";
     }
 
+
     @PostMapping("/rating/validate")
     public String validate(@Valid @ModelAttribute("rating") Rating rating, BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "rating/add";
     	}
     	
     	ratingService.createRating(rating);
     	model.addAttribute("ratings", ratingService.getRatingList());
-    	log.info("new rating created : " + rating.getId() + ", redirect to /rating/list");
+    	log.info("Controller : new rating created : " + rating.getId() + ", redirect to /rating/list");
         return "redirect:/rating/list";
     }
+
 
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -59,38 +63,40 @@ public class RatingController {
 		try {
 			Rating rating = ratingService.getById(id);
 			model.addAttribute("rating", rating);
-    		log.info("get rating by id : " + id);
+    		log.info("Controller : get rating by id : " + id);
     		return "rating/update";
 		} catch (Exception e) {
 			model.addAttribute("errorId", "Invalid rating Id:" + id);
-			log.error("error, invalid rating id : " + id);
+			log.error("Controller : error, invalid rating id : " + id);
 			return "rating/update";
 		}
  
     }
 
+
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                              BindingResult result, Model model) {
         if(result.hasErrors()) {
-        	log.error("error : " + result);
+        	log.error("Controller : error : " + result);
     		return "rating/update";
         }
         
         ratingService.updateRating(rating, id);
-        log.info("updated rating : " + rating.getId());
+        log.info("Controller : updated rating : " + rating.getId());
     	model.addAttribute("ratings", ratingService.getRatingList());
         return "redirect:/rating/list";
     }
+
 
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
 
     	try {
 			ratingService.deleteRating(id);
-			log.info("deleted rating with id : " + id);
+			log.info("Controller : deleted rating with id : " + id);
 		} catch (Exception e) {
-			log.error("invalid id : " + id);
+			log.error("Controller : invalid id : " + id);
 		}
     	
     	model.addAttribute("ratings", ratingService.getRatingList());

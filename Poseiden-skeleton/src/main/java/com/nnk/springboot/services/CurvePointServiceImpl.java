@@ -3,14 +3,19 @@ package com.nnk.springboot.services;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nnk.springboot.controllers.BidListController;
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.repositories.CurvePointRepository;
 
 @Service
 public class CurvePointServiceImpl implements CurvePointService {
+	
+	Logger log = LoggerFactory.getLogger(BidListController.class);
 	
 	@Autowired
 	CurvePointRepository curvePointRepository;
@@ -24,23 +29,24 @@ public class CurvePointServiceImpl implements CurvePointService {
 	@Override
 	public CurvePoint getById(Integer id) {
 
-		CurvePoint curvePoint = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
+		CurvePoint curvePoint = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
 
 		return curvePoint;
 	}
 
 
 	@Override
-	public void createCurvePoint(CurvePoint dto) {
+	public CurvePoint createCurvePoint(CurvePoint dto) {
 
 		dto.setCreationDate(new Timestamp(System.currentTimeMillis()));
 		
-		curvePointRepository.save(dto);
+		log.info("Service : curve created");
+		return curvePointRepository.save(dto);
 		
 	}
 
 	@Override
-	public void updateCurvePoint(CurvePoint dto, Integer id) {
+	public CurvePoint updateCurvePoint(CurvePoint dto, Integer id) {
 
 		CurvePoint curvePoint = curvePointRepository.findById(id).get();
 		
@@ -48,13 +54,15 @@ public class CurvePointServiceImpl implements CurvePointService {
 		curvePoint.setTerm(dto.getTerm());
 		curvePoint.setValue(dto.getValue());
 		
-		curvePointRepository.save(curvePoint);
+		log.info("Service : curve " + id + " updated");
+		return curvePointRepository.save(curvePoint);
 		
 	}
 
 	@Override
 	public void deleteCurvePoint(Integer id) throws Exception {
 		
+		log.info("Service : curve " + id + " updated");
 		curvePointRepository.deleteById(id);
 		
 	}

@@ -22,7 +22,7 @@ import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.services.BidListServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-public class BidServiceTest {
+public class BidListServiceTests {
 	
 	@Mock
 	private BidListRepository bidListRepository;
@@ -40,6 +40,7 @@ public class BidServiceTest {
 
 		
 		assertThat(bidSaved).isNotNull();
+		assertEquals(bid, bidSaved);
 		verify(bidListRepository).save(any(BidList.class));
 	}
 
@@ -53,6 +54,7 @@ public class BidServiceTest {
 		BidList bidUpdated = bidListService.updateBidList(bid, 1);
 		
 		assertThat(bidUpdated).isNotNull();
+		assertEquals(bid, bidUpdated);
 		verify(bidListRepository).save(any(BidList.class));
 	}
 	
@@ -82,6 +84,7 @@ public class BidServiceTest {
 		BidList bidExcepted = bidListService.getById(id);
 		
 		assertThat(bidExcepted).isNotNull();
+		assertEquals(bid, bidExcepted);
 	}
 	
 	

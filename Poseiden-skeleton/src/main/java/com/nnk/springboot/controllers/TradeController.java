@@ -25,13 +25,15 @@ public class TradeController {
 	@Autowired
 	TradeService tradeService;
 
+
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
         model.addAttribute("trades", tradeService.getTradeList());
-        log.info("get list of all trades");
+        log.info("Controller : get list of all trades");
         return "trade/list";
     }
+
 
     @GetMapping("/trade/add")
     public String addUser(Model model) {
@@ -39,19 +41,21 @@ public class TradeController {
         return "trade/add";
     }
 
+
     @PostMapping("/trade/validate")
     public String validate(@Valid @ModelAttribute("trade") Trade trade, BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "trade/add";
     	}
     	
     	tradeService.createTrade(trade);
     	model.addAttribute("trades", tradeService.getTradeList());
-    	log.info("new curvePoint created : " + trade.getTradeId() + ", redirect to /trade/list");
+    	log.info("Controller : new curvePoint created : " + trade.getTradeId() + ", redirect to /trade/list");
         return "redirect:/trade/list";
     }
+
 
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -59,39 +63,41 @@ public class TradeController {
     	try {
 			Trade trade = tradeService.getById(id);
 			model.addAttribute("trade", trade);
-    		log.info("get trade by id : " + id);
+    		log.info("Controller : get trade by id : " + id);
     		return "trade/update";
 		} catch (Exception e) {
 			model.addAttribute("errorId", "Invalid trade Id:" + id);
-			log.error("error, invalid trade id : " + id);
+			log.error("Controller : error, invalid trade id : " + id);
 			return "trade/update";
 		}
 
     }
+
 
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid Trade trade,
                              BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "trade/update";
     	}
     	
     	tradeService.updateTrade(trade, id);
-    	log.info("updated curvePoint : " + trade.getTradeId());
+    	log.info("Controller : updated curvePoint : " + trade.getTradeId());
     	model.addAttribute("trades", tradeService.getTradeList());
         return "redirect:/trade/list";
     }
+
 
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         
     	try {
 			tradeService.deleteTrade(id);
-			log.info("deleted trade with id : " + id);
+			log.info("Controller : deleted trade with id : " + id);
 		} catch (Exception e) {
-			log.error("invalid id : " + id);
+			log.error("Controller : invalid id : " + id);
 		}
     	
     	model.addAttribute("trades", tradeService.getTradeList());

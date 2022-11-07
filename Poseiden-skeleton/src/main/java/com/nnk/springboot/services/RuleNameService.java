@@ -10,9 +10,9 @@ public interface RuleNameService {
 	
 	RuleName getById(Integer id);
 	
-	void createRuleName(RuleName dto);
+	RuleName createRuleName(RuleName dto);
 	
-	void updateRuleName(RuleName dto, Integer id);
+	RuleName updateRuleName(RuleName dto, Integer id);
 	
 	void deleteRuleName(Integer id) throws Exception;
 

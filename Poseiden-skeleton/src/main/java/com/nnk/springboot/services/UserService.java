@@ -12,11 +12,13 @@ public interface UserService extends UserDetailsService{
 	
 	User getById(Integer id);
 	
-	void addUser(User dto);
-
-	void createUser(User dto);
+	boolean existsByUserName(String userName);
 	
-	void updateUser(User dto, Integer id);
+	User addUser(User dto);
+
+	User createUser(User dto);
+	
+	User updateUser(User dto, Integer id);
 	
 	void deleteUser(Integer id) throws Exception;
 }

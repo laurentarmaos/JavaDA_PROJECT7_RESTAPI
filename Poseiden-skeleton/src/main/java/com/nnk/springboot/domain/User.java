@@ -43,6 +43,14 @@ public class User{
 		this.fullname = fullname;
 		this.role = role;
 	}
+    
+    public User(Integer id, String username, String password, String fullname, String role) {
+    	this.id = id;
+		this.username = username;
+		this.password = password;
+		this.fullname = fullname;
+		this.role = role;
+	}
 
 
 

@@ -25,13 +25,15 @@ public class RuleNameController {
 	@Autowired
 	RuleNameService ruleNameService;
 
+	//rulename list page
     @RequestMapping("/ruleName/list")
     public String home(Model model)
     {
         model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
-        log.info("get list of all ruleNames");
+        log.info("Controller : get list of all ruleNames");
         return "ruleName/list";
     }
+
 
     @GetMapping("/ruleName/add")
     public String addRuleForm(Model model) {
@@ -39,19 +41,21 @@ public class RuleNameController {
         return "ruleName/add";
     }
 
+
     @PostMapping("/ruleName/validate")
     public String validate(@Valid @ModelAttribute("ruleName") RuleName ruleName, BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "ruleName/add";
     	}
     	
     	ruleNameService.createRuleName(ruleName);
     	model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
-    	log.info("new ruleName created : " + ruleName.getId() + ", redirect to /ruleName/list");
+    	log.info("Controller : new ruleName created : " + ruleName.getId() + ", redirect to /ruleName/list");
         return "redirect:/ruleName/list";
     }
+
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -59,39 +63,41 @@ public class RuleNameController {
     	try {
     		RuleName ruleName = ruleNameService.getById(id);
     		model.addAttribute("ruleName", ruleName);
-    		log.info("get ruleName by id : " + id);
+    		log.info("Controller : get ruleName by id : " + id);
     		return "ruleName/update";
 		} catch (Exception e) {
 			model.addAttribute("errorId", "Invalid ruleName Id:" + id);
-			log.error("error, invalid ruleName id : " + id);
+			log.error("Controller : error, invalid ruleName id : " + id);
 			return "ruleName/update";
 		}
  
     }
+
 
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                              BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "ruleName/update";
     	}
     	
     	ruleNameService.updateRuleName(ruleName, id);
-    	log.info("updated ruleName : " + ruleName.getId());
+    	log.info("Controller : updated ruleName : " + ruleName.getId());
     	model.addAttribute("ruleNames", ruleNameService.getRuleNameList()); 
         return "redirect:/ruleName/list";
     }
+
 
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
 
     	try {
     		ruleNameService.deleteRuleName(id);
-    		log.info("deleted ruleName with id : " + id);
+    		log.info("Controller : deleted ruleName with id : " + id);
 		} catch (Exception e) {
-			log.error("invalid id : " + id);
+			log.error("Controller : invalid id : " + id);
 		}
     	
     	model.addAttribute("ruleNames", ruleNameService.getRuleNameList()); 

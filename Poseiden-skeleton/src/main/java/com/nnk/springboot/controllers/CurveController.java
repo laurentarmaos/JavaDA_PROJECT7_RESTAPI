@@ -26,33 +26,37 @@ public class CurveController {
 	@Autowired
 	CurvePointService curvePointService;
 
+
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
         model.addAttribute("curvePoints", curvePointService.getCurveList());
-        log.info("get list of all curvePoints");
+        log.info("Controller : get list of all curvePoints");
         return "curvePoint/list";
     }
 
+
     @GetMapping("/curvePoint/add")
-    public String addBidForm(Model model) {
+    public String addCurveForm(Model model) {
     	model.addAttribute("curvePoint", new CurvePoint());
         return "curvePoint/add";
     }
 
+    
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid @ModelAttribute("curvePoint") CurvePoint curvePoint, BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "curvePoint/add";
     	}
     	
     	curvePointService.createCurvePoint(curvePoint);
     	model.addAttribute("curvePoints", curvePointService.getCurveList());
-    	log.info("new curvePoint created : " + curvePoint.getId() + ", redirect to /curvePoint/list");
+    	log.info("Controller : new curvePoint created : " + curvePoint.getId() + ", redirect to /curvePoint/list");
     	return "redirect:/curvePoint/list";
     }
+
 
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -60,38 +64,40 @@ public class CurveController {
     	try {
     		CurvePoint curvePoint = curvePointService.getById(id);
     		model.addAttribute("curvePoint", curvePoint);
-    		log.info("get curvePoint by id : " + id);
+    		log.info("Controller : get curvePoint by id : " + id);
     		return "curvePoint/update";
 		} catch (Exception e) {
 			model.addAttribute("errorId", "Invalid curve Id:" + id);
-			log.error("error, invalid curvePoint id : " + id);
+			log.error("Controller : error, invalid curvePoint id : " + id);
 			return "curvePoint/update";
 		}	
     }
 
+
     @PostMapping("/curvePoint/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
+    public String updateCurve(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
 
     	if(result.hasErrors()) {
-    		log.error("error : " + result);
+    		log.error("Controller : error : " + result);
     		return "curvePoint/update";
     	}
     	
     	curvePointService.updateCurvePoint(curvePoint, id);
-    	log.info("updated curvePoint : " + curvePoint.getId());
+    	log.info("Controller : updated curvePoint : " + curvePoint.getId());
     	model.addAttribute("curvePoints", curvePointService.getCurveList());
         return "redirect:/curvePoint/list";
     }
 
+
     @GetMapping("/curvePoint/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
+    public String deleteCurve(@PathVariable("id") Integer id, Model model) {
 
     	try {
     		curvePointService.deleteCurvePoint(id);
-    		log.info("deleted curvePoint with id : " + id);
+    		log.info("Controller : deleted curvePoint with id : " + id);
 		} catch (Exception e) {
-			log.error("invalid id : " + id);
+			log.error("Controller : invalid id : " + id);
 		}
     	
     	model.addAttribute("curvePoints", curvePointService.getCurveList());

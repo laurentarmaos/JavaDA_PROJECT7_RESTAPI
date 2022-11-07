@@ -10,9 +10,9 @@ public interface RatingService {
 	
 	Rating getById(Integer id);
 	
-	void createRating(Rating dto);
+	Rating createRating(Rating dto);
 	
-	void updateRating(Rating dto, Integer id);
+	Rating updateRating(Rating dto, Integer id);
 	
 	void deleteRating(Integer id) throws Exception;
 
