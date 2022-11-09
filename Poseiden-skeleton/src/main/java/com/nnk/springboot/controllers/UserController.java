@@ -79,7 +79,7 @@ public class UserController {
 			log.info("Controller : get user by id : " + id);
             return "user/update";
 		} catch (Exception e) {
-			model.addAttribute("errorId", "Invalid bid Id:" + id);
+			model.addAttribute("errorId", "Invalid user Id:" + id);
 			log.error("Controller : error, invalid user id : " + id);
             return "user/update";
 		}
@@ -101,22 +101,37 @@ public class UserController {
         return "redirect:/user/list";
     }
 
+    
+    public boolean hasAppropriateRole() {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    	return authentication.getAuthorities().stream()
+    	          .anyMatch(r -> r.getAuthority().equals("ADMIN"));
+    }
+    
     //admin authority
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
 
-    	try {
-			userService.deleteUser(id);
-			log.info("Controller : deleted user with id : " + id);
-		} catch (Exception e) {
-			log.error("Controller : invalid id : " + id);
-		}
-    	model.addAttribute("users", userService.getUserList());
-        return "redirect:/user/list";
+    	if (hasAppropriateRole()) {
+    		
+    		try {
+    			userService.deleteUser(id);
+    			log.info("Controller : deleted user with id : " + id);
+    		} catch (Exception e) {
+    			log.error("Controller : invalid id : " + id);
+    		}
+    		model.addAttribute("users", userService.getUserList());
+    		return "redirect:/user/list";
+    	} else {
+    		return "/home";
+    		
+    	}
+    	
     }
     
     
-    
+   
     @GetMapping("/login")
     public String login(Model model) {
     	

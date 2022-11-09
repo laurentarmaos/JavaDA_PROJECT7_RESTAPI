@@ -20,7 +20,6 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
         	.authorizeRequests()
-        	//.anyRequest().permitAll();
         	.antMatchers("/register", "/webjars/**", "/css/**").permitAll()
         	.antMatchers("/user/add", "/user/validate", "/user/list", "/user/update").hasAuthority("ADMIN")
     		.anyRequest().authenticated()
